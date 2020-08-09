@@ -27,7 +27,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: f6059fbb7ef325552fd39f8b1de0efd4857f63ad
+      resolved-ref: "38ca22b1b5b81920e66bcab732bfbbc9f9a16d67"
       url: "git://github.com/mochetti/arkit_flutter_plugin.git"
     source: git
     version: "0.5.2"

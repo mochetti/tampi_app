@@ -4,6 +4,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'BuzzerPage.dart';
 import 'websocket.dart';
 import 'teste.dart';
+import 'realTimeUpdateAR.dart';
 
 class ConfigPage extends StatefulWidget {
   @override
@@ -66,7 +67,7 @@ class _ConfigPage extends State<ConfigPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => MyImageTracker(),
+                  builder: (context) => RealTimeUpdatesPage(),
                 ),
               );
             },

@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "circuloColorido.png",
+      "filename" : "tigreColorido.jpeg",
       "idiom" : "universal"
     }
   ],
@@ -11,6 +11,6 @@
   },
   "properties" : {
     "unit" : "centimeters",
-    "width" : 4
+    "width" : 11
   }
 }

@@ -4,7 +4,6 @@ import 'ControlePage.dart';
 import 'ConfigPage.dart';
 import 'websocket.dart';
 import 'ARPage.dart';
-import 'teste.dart';
 import 'BuzzerPage.dart';
 
 class ConectedPage extends StatefulWidget {

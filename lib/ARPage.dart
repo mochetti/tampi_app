@@ -8,22 +8,28 @@ import 'ARCorePage.dart';
 
 class ARPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => Platform.isAndroid ? ARCoreState() : ARKitState();
+  State<StatefulWidget> createState() =>
+      Platform.isAndroid ? ARCoreState() : ARKitState();
+//  State<StatefulWidget> createState() => ARCoreState();
+
 }
 
 class ARKitState extends State<ARPage> {
   ARKitController arkitController;
+  bool busy = false;
   ARKitNode alvo;
   ARKitNode tampi = ARKitReferenceNode(
     name: "tampi",
     url: 'models.scnassets/arrow.dae',
     scale: vector.Vector3(5, 5, 5),
+    isHidden: false,
   );
   bool tampiPresente = false;
   ARKitPlane plane;
   ARKitNode node;
   String anchorId;
-  vector.Vector3 lastPosition;
+
+//  vector.Vector3 lastPosition;
   Timer timer;
   int angBalanco = 0;
   bool anchorWasFound = false;
@@ -48,9 +54,16 @@ class ARKitState extends State<ARPage> {
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(title: const Text('AR')),
         floatingActionButton: FloatingActionButton(
-          onPressed: tracarCaminho,
+          onPressed: () {
+            if(tracking) {
+              tracking = false;
+              arkitController.remove("line");
+            }
+            else tracking = true;
+            setState((){});
+          },
           tooltip: 'Enviar',
-          child: Icon(Icons.send),
+          child: tracking ? Icon(Icons.stop) : Icon(Icons.play_arrow),
         ),
         body: Container(
           child: ARKitSceneView(
@@ -100,42 +113,25 @@ class ARKitState extends State<ARPage> {
       plane.height.value = planeAnchor.extent.z;
       return;
     } else if (anchor is ARKitImageAnchor) {
-//      arkitController.remove("tampi");
-//      tampiPresente = false;
       if (!anchor.isTracked) {
         print('not tracked');
+        tampi.isHidden.value = true;
+        arkitController.remove("line");
         return;
       }
+      tampi.isHidden.value = false;
 
-//      print('atualizando o tampi');
+      if (busy) return;
 
-      final tampiPosition = vector.Vector3(
-        anchor.transform.getColumn(3).x,
-        anchor.transform.getColumn(3).y,
-        anchor.transform.getColumn(3).z,
-      );
+      busy = true;
 
-      // get the matrix coordinates
-      double r11 = anchor.transform.getRotation().entry(0, 0);
-      double r21 = anchor.transform.getRotation().entry(1, 0);
-      double r31 = anchor.transform.getRotation().entry(2, 0);
-      double r32 = anchor.transform.getRotation().entry(2, 1);
-      double r33 = anchor.transform.getRotation().entry(2, 2);
+      atualizaTampi(anchor);
 
-      // calculate the euler angles
-//      double rx = math.atan(r32 / r33);
-//      double ry = math.atan2(-1 * r31, r32 / math.sin(rx));
-//      double rz = math.atan(r21 / r11);
-
-      tampi.position.value = tampiPosition;
       if (!tampiPresente) {
+        print('tampi presente');
         tampiPresente = true;
         arkitController.add(tampi);
       }
-
-//      print(ry * 180 / math.pi);
-
-//      tampi.eulerAngles.value.y = ry;
 
       if (tracking) {
         tracarCaminho();
@@ -172,52 +168,41 @@ class ARKitState extends State<ARPage> {
   }
 
   void _onPlaneTapHandler(Matrix4 transform) {
+    arkitController.remove('alvo');
+
     final position = vector.Vector3(
       transform.getColumn(3).x,
       transform.getColumn(3).y,
       transform.getColumn(3).z,
     );
-    final material = ARKitMaterial(
-      lightingModelName: ARKitLightingModel.physicallyBased,
-      diffuse: ARKitMaterialProperty(
-        color: Color((math.Random().nextDouble() * 0xFFFFFF).toInt() << 0)
-            .withOpacity(1.0),
-      ),
-    );
-    final sphere = ARKitSphere(
-      radius: 0.03,
-      materials: [material],
-    );
-//    final node = ARKitNode(
-//      geometry: sphere,
-//      position: position,
-//    );
+
     final node = ARKitReferenceNode(
+      name: 'alvo',
       url: 'models.scnassets/nykz-flag.dae',
       position: position,
 //      scale: vector.Vector3(0.002, 0.002, 0.002),
     );
+
     arkitController.add(node);
     alvo = node;
-    lastPosition = position;
   }
 
   void tracarCaminho() {
-    if (lastPosition != null) {
-      arkitController.remove("line");
-      final line = ARKitLine(
-        fromVector: tampi.position.value,
-        toVector: alvo.position.value,
-      );
-      final lineNode = ARKitNode(name: "line", geometry: line);
-      arkitController.add(lineNode);
+    if (alvo.position == null) return;
 
-      final distance = _calculateDistanceBetweenPoints(
-          alvo.position.value, tampi.position.value);
+    arkitController.remove("line");
+    final line = ARKitLine(
+      fromVector: tampi.position.value,
+      toVector: alvo.position.value,
+    );
+    final lineNode = ARKitNode(name: "line", geometry: line);
+    arkitController.add(lineNode);
+
+    final distance = _calculateDistanceBetweenPoints(
+        alvo.position.value, tampi.position.value);
 //      final point = _getMiddleVector(position, lastPosition);
 //      _drawText(distance, point);
-      print(distance);
-    }
+    print(distance);
 
 //    tracking = true; // habilita o loop
 
@@ -265,5 +250,49 @@ class ARKitState extends State<ARPage> {
   String _calculateDistanceBetweenPoints(vector.Vector3 A, vector.Vector3 B) {
     final length = A.distanceTo(B);
     return '${(length * 100).toStringAsFixed(2)} cm';
+  }
+
+  Future<void> atualizaTampi(ARKitAnchor anchor) {
+    print('atualizando o tampi');
+
+    final tampiPosition = vector.Vector3(
+      anchor.transform.getColumn(3).x,
+      anchor.transform.getColumn(3).y,
+      anchor.transform.getColumn(3).z,
+    );
+
+    // get the matrix coordinates
+    double r00 = anchor.transform.getRotation().entry(0, 0);
+    double r10 = anchor.transform.getRotation().entry(1, 0);
+    double r11 = anchor.transform.getRotation().entry(1, 1);
+    double r12 = anchor.transform.getRotation().entry(1, 2);
+    double r20 = anchor.transform.getRotation().entry(2, 0);
+    double r21 = anchor.transform.getRotation().entry(2, 1);
+    double r22 = anchor.transform.getRotation().entry(2, 2);
+
+    // calculate the euler angles
+    double rx, ry, rz;
+
+    double sy = math.sqrt(r00 * r00 + r10 * r10);
+
+    bool singular = sy < 1e-6; // If
+
+    if (!singular) {
+//      print("matriz é singular");
+      rx = math.atan2(r21, r22);
+      ry = math.atan2(-r20, sy);
+      rz = math.atan2(r10, r00);
+    } else {
+      print("matriz nao singular");
+      rx = math.atan2(-r12, r11);
+      ry = math.atan2(-r20, sy);
+      rz = 0;
+    }
+
+//    print(ry * 180 / math.pi);
+
+    tampi.position.value = tampiPosition;
+    tampi.eulerAngles.value = vector.Vector3(0, ry, 0);
+    return Future.delayed(Duration(milliseconds: 100), () => busy = false);
   }
 }

@@ -12,10 +12,11 @@ class ARCoreState extends State<ARPage> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Hello World'),
+          title: const Text('ARCore'),
         ),
         body: ArCoreView(
           onArCoreViewCreated: _onArCoreViewCreated,
+          enableTapRecognizer: true,
         ),
       ),
     );
@@ -23,9 +24,26 @@ class ARCoreState extends State<ARPage> {
   void _onArCoreViewCreated(ArCoreController controller) {
     arCoreController = controller;
 
-    _addSphere(arCoreController);
-    _addCylindre(arCoreController);
-    _addCube(arCoreController);
+//    arCoreController.onPlaneTap = _onPlaneTapHandler;
+
+    arCoreController.onPlaneDetected = _onPlaneDetected;
+  }
+
+  void _onPlaneDetected(ArCorePlane plane) {
+    print("plano detected");
+
+    final earthMaterial = ArCoreMaterial(
+        color: Color.fromARGB(120, 66, 134, 244));
+    final earthShape = ArCoreSphere(
+      materials: [earthMaterial],
+      radius: 0.1,
+    );
+    final earth = ArCoreNode(
+        shape: earthShape,
+        position: plane.centerPose.translation + vector.Vector3(0.0, 1.0, 0.0),
+        rotation: plane.centerPose.rotation);
+
+    arCoreController.addArCoreNode(earth);
   }
 
   void _addSphere(ArCoreController controller) {
