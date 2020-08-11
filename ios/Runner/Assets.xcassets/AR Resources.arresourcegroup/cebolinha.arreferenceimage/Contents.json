@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "tigreColorido.jpeg",
+      "filename" : "cebolinha.png",
       "idiom" : "universal"
     }
   ],
@@ -11,6 +11,6 @@
   },
   "properties" : {
     "unit" : "centimeters",
-    "width" : 11
+    "width" : 13.5
   }
 }

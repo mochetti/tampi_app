@@ -133,7 +133,6 @@ class _DraggableCardState extends State<DraggableCard>
             details.delta.dy / (size.height / 2),
           );
         });
-        String s = 'm'; // caracter de inicio de movimento
 
         double x = details.globalPosition.dx * 100 / size.width;
         double y = details.globalPosition.dy * 100 / size.height;
@@ -153,9 +152,7 @@ class _DraggableCardState extends State<DraggableCard>
           m2 = y * -1 * 2046 / 100 + 1023;
         }
 
-//        if(m1 <= 0) m1 = -1 * m1 + 1023;
-//        if(m2 <= 0) m2 = -1 * m2 + 1023;
-
+        String s = 'm'; // caracter de inicio de movimento
         s += m1.toStringAsFixed(0);
         s += ':';
         s += m2.toStringAsFixed(0);

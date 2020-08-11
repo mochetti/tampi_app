@@ -1,96 +1,66 @@
 import 'ARPage.dart';
 import 'dart:math' as math;
 import 'dart:async';
+import 'package:flutter/services.dart';
 import 'package:arcore_flutter_plugin/arcore_flutter_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math_64.dart' as vector;
 
 class ARCoreState extends State<ARPage> {
   ArCoreController arCoreController;
+  Map<int, ArCoreAugmentedImage> augmentedImagesMap = Map();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('ARCore'),
+          title: const Text('AR Core'),
         ),
         body: ArCoreView(
           onArCoreViewCreated: _onArCoreViewCreated,
-          enableTapRecognizer: true,
+          type: ArCoreViewType.AUGMENTEDIMAGES,
         ),
       ),
     );
   }
-  void _onArCoreViewCreated(ArCoreController controller) {
+
+  void _onArCoreViewCreated(ArCoreController controller) async {
     arCoreController = controller;
-
-//    arCoreController.onPlaneTap = _onPlaneTapHandler;
-
-    arCoreController.onPlaneDetected = _onPlaneDetected;
+    arCoreController.onTrackingImage = _handleOnTrackingImage;
+    loadSingleImage();
+    //OR
+//    loadImagesDatabase();
   }
 
-  void _onPlaneDetected(ArCorePlane plane) {
-    print("plano detected");
-
-    final earthMaterial = ArCoreMaterial(
-        color: Color.fromARGB(120, 66, 134, 244));
-    final earthShape = ArCoreSphere(
-      materials: [earthMaterial],
-      radius: 0.1,
-    );
-    final earth = ArCoreNode(
-        shape: earthShape,
-        position: plane.centerPose.translation + vector.Vector3(0.0, 1.0, 0.0),
-        rotation: plane.centerPose.rotation);
-
-    arCoreController.addArCoreNode(earth);
+  loadSingleImage() async {
+    final ByteData bytes = await rootBundle.load('assets/cebolinha.png');
+    arCoreController.loadSingleAugmentedImage(
+        bytes: bytes.buffer.asUint8List());
   }
 
-  void _addSphere(ArCoreController controller) {
-    final material = ArCoreMaterial(
-        color: Color.fromARGB(120, 66, 134, 244));
-    final sphere = ArCoreSphere(
-      materials: [material],
-      radius: 0.1,
-    );
-    final node = ArCoreNode(
-      shape: sphere,
-      position: vector.Vector3(0, 0, -1.5),
-    );
-    controller.addArCoreNode(node);
+  loadImagesDatabase() async {
+    final ByteData bytes = await rootBundle.load('assets/myimages.imgdb');
+    arCoreController.loadAugmentedImagesDatabase(
+        bytes: bytes.buffer.asUint8List());
   }
 
-  void _addCylindre(ArCoreController controller) {
-    final material = ArCoreMaterial(
-      color: Colors.red,
-      reflectance: 1.0,
-    );
-    final cylindre = ArCoreCylinder(
-      materials: [material],
-      radius: 0.5,
-      height: 0.3,
-    );
-    final node = ArCoreNode(
-      shape: cylindre,
-      position: vector.Vector3(0.0, -0.5, -2.0),
-    );
-    controller.addArCoreNode(node);
+  _handleOnTrackingImage(ArCoreAugmentedImage augmentedImage) {
+    if (!augmentedImagesMap.containsKey(augmentedImage.index)) {
+      augmentedImagesMap[augmentedImage.index] = augmentedImage;
+      atualizaTampi(augmentedImage);
+    }
   }
 
-  void _addCube(ArCoreController controller) {
-    final material = ArCoreMaterial(
-      color: Color.fromARGB(120, 66, 134, 244),
-      metallic: 1.0,
-    );
-    final cube = ArCoreCube(
-      materials: [material],
-      size: vector.Vector3(0.5, 0.5, 0.5),
-    );
-    final node = ArCoreNode(
-      shape: cube,
-      position: vector.Vector3(-0.5, 0.5, -3.5),
-    );
-    controller.addArCoreNode(node);
+  Future atualizaTampi(ArCoreAugmentedImage augmentedImage) async {
+
+    final arrow = ArCoreReferenceNode(
+        name: 'tampi',
+        objectUrl: 'assets/arrow.dae',
+        position: augmentedImage.centerPose.translation,
+        rotation: augmentedImage.centerPose.rotation);
+
+    await arCoreController.addArCoreNode(arrow);                                // esse await adianta alguma coisa aqui ?
   }
 
   @override

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:tampi/ARPage.dart';
 import 'BuzzerPage.dart';
 import 'websocket.dart';
-import 'teste.dart';
-import 'realTimeUpdateAR.dart';
 
 class ConfigPage extends StatefulWidget {
   @override
@@ -67,7 +66,7 @@ class _ConfigPage extends State<ConfigPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => RealTimeUpdatesPage(),
+                  builder: (context) => ARPage(),
                 ),
               );
             },

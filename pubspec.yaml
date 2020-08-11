@@ -24,7 +24,9 @@ dependencies:
   qr_flutter: ^3.1.0
   connectivity: '>=0.4.8+6 <2.0.0'
   wifi_iot: ^0.1.1
-  arcore_flutter_plugin: ^0.0.5+1
+  arcore_flutter_plugin:
+    git:
+      url: git://github.com/mochetti/arcore_flutter_plugin.git
   arkit_plugin:
     git:
       url: git://github.com/mochetti/arkit_flutter_plugin.git

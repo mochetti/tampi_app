@@ -11,9 +11,11 @@ packages:
   arcore_flutter_plugin:
     dependency: "direct main"
     description:
-      name: arcore_flutter_plugin
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: a28282bfc403b58792d86cb0a5076681ead5e827
+      url: "git://github.com/mochetti/arcore_flutter_plugin.git"
+    source: git
     version: "0.0.5+1"
   args:
     dependency: transitive
