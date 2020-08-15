@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'ConectedPage.dart';
 import 'websocket.dart';
 import 'package:connectivity/connectivity.dart';
+import 'instrucoesConexaoPage.dart';
 
 void main() => runApp(MyApp());
 
@@ -27,8 +28,8 @@ class _Home extends State<Home> {
     return Scaffold(
       backgroundColor: Colors.lightBlueAccent,
       floatingActionButton: FloatingActionButton(
-          onPressed: () => _onMessageReceived('welcome'),
-          child: Icon(Icons.wifi),
+        onPressed: () => _onMessageReceived('welcome'),
+        child: Icon(Icons.wifi),
       ),
 //      appBar: AppBar(
 //        title: Text('tampi'),
@@ -53,12 +54,19 @@ class _Home extends State<Home> {
                 // nao estamos no wifi
                 faltaConectar();
               }
-              // estamos no wifi mas resta verificar se a conexao com o tampi existe
+              // estamos no wifi
               else {
-                sockets.initCommunication();
-                sockets.addListener(_onMessageReceived);
-                // debug
+                var SSID = await (Connectivity().getWifiName());
+                // checa se estamos no wifi correto
+                if (SSID != 'tampi')
+                  faltaConectar();
+                else {
+                  // tenta abrir o websocket
+                  sockets.initCommunication();
+                  sockets.addListener(_onMessageReceived);
+                  // debug
 //                _onMessageReceived('welcome');
+                }
               }
             },
           ),
@@ -79,45 +87,21 @@ class _Home extends State<Home> {
 
   void _onMessageReceived(message) {
     // verifica se a msg é pra mim
-    if(message.toString() == 'welcome') {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ConectedPage(),
-          ),
-        );
-      } else if (message.toString() == 'erro') {
-        faltaConectar();
-      }
+    if (message.toString() == 'welcome') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ConectedPage(),
+        ),
+      );
+    } else if (message.toString() == 'erro') {
+      faltaConectar();
     }
+  }
 
   @override
   void dispose() {
     sockets.removeListener(_onMessageReceived);
     super.dispose();
-  }
-}
-
-class instrucoesConexao extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Conectar'),
-      ),
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            Text('Instrucoes de conexao'),
-//            RaisedButton(
-//              onPressed: () {
-//                Navigator.of(context).popUntil((route) => route.isFirst);
-//              },
-//              child: Text('Entendi!'),
-//            )
-          ],
-        ),
-      ),
-    );
   }
 }

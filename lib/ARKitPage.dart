@@ -11,14 +11,22 @@ class ARKitState extends State<ARPage> {
   bool busyPosicao = false;
   bool busyRotacao = false;
   bool busyTracking = false;
-  ARKitNode alvo;
+  bool alvoExiste = false;
+
+  ARKitNode alvo = ARKitReferenceNode(
+    name: 'alvo',
+    url: 'models.scnassets/nykz-flag.dae',
+//      scale: vector.Vector3(0.002, 0.002, 0.002),
+  );
   ARKitNode tampi = ARKitReferenceNode(
     name: "tampi",
     url: 'models.scnassets/arrow.dae',
     scale: vector.Vector3(5, 5, 5),
     isHidden: false,
   );
-  bool tampiPresente = false;
+
+//  bool tampiPresente = false;
+  bool tampiExiste = false;
   ARKitPlane plane;
   ARKitNode node;
   String anchorId;
@@ -47,21 +55,40 @@ class ARKitState extends State<ARPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(title: const Text('AR Kit')),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            if (tracking) {
-              tracking = false;
-              arkitController.remove("line");
-              String s = '';
-              s += 'm0:0e';
-              print(s);
-              sockets.send(s);
-            } else
-              tracking = true;
-            setState(() {});
-          },
-          tooltip: 'Enviar',
-          child: tracking ? Icon(Icons.stop) : Icon(Icons.play_arrow),
+        floatingActionButton: Visibility(
+          child: FloatingActionButton(
+            onPressed: () {
+              if (tracking) {
+                // stop
+                tracking = false;
+                arkitController.remove("line");
+                timer.cancel();
+                String s = '';
+                s += 'm0:0e';
+                print(s);
+                sockets.send(s);
+              } else {
+                // play
+//                if (alvo.position?.value == null) {
+//                  print('alvo invalido');
+//                  return;
+//                }
+                tracking = true;
+                timer = Timer.periodic(
+                    Duration(milliseconds: 100),
+                    (timer) => (busyTracking ||
+                            alvo.position.value == null ||
+                            tampi.isHidden.value)
+                        ? print('tracking ocupado ou alvo invalido ou IsHidden')
+                        : tracarCaminho());
+              }
+              setState(() {});
+            },
+            tooltip: 'Enviar',
+            child: tracking ? Icon(Icons.cancel) : Icon(Icons.navigation),
+            backgroundColor: tracking ? Colors.red : Colors.green,
+          ),
+          visible: alvoExiste,
         ),
         body: Container(
           child: ARKitSceneView(
@@ -70,6 +97,7 @@ class ARKitState extends State<ARPage> {
             enableTapRecognizer: true,
             onARKitViewCreated: onARKitViewCreated,
             maximumNumberOfTrackedImages: 1,
+            // habilita o tracking
 //            detectionImages: imagens,
             detectionImagesGroupName: 'AR Resources',
           ),
@@ -93,6 +121,7 @@ class ARKitState extends State<ARPage> {
   }
 
   void onAnchorWasFound(ARKitAnchor anchor) {
+    print('onAnchorWasFound - deveria passar por aqui ?');
     if (anchor is ARKitPlaneAnchor) {
 //      if(planoEncontrado) return;
       _addPlane(arkitController, anchor);
@@ -115,7 +144,7 @@ class ARKitState extends State<ARPage> {
       if (!anchor.isTracked) {
         print('not tracked');
         tampi.isHidden.value = true;
-        arkitController.remove("line");
+        arkitController.remove('line');
         String s = '';
         s += 'm0:0e';
         print(s);
@@ -124,9 +153,9 @@ class ARKitState extends State<ARPage> {
       }
       tampi.isHidden.value = false;
 
-      if (!tampiPresente) {
+      if (!tampiExiste) {
         print('tampi presente');
-        tampiPresente = true;
+        tampiExiste = true;
         arkitController.add(tampi);
       }
 
@@ -134,13 +163,13 @@ class ARKitState extends State<ARPage> {
 
       if (!busyRotacao) atualizaRotacao(anchor);
 
-      if (tracking && !busyTracking) {
-        if (alvo.position == null) {
-          print('alvo invalido');
-          return;
-        }
-        tracarCaminho();
-      }
+//      if (tracking && !busyTracking) {
+//        if (alvo.position == null) {
+//          print('alvo invalido');
+//          return;
+//        }
+//        tracarCaminho();
+//      }
     }
   }
 
@@ -181,28 +210,23 @@ class ARKitState extends State<ARPage> {
       transform.getColumn(3).z,
     );
 
-    final node = ARKitReferenceNode(
-      name: 'alvo',
-      url: 'models.scnassets/nykz-flag.dae',
-      position: position,
-//      scale: vector.Vector3(0.002, 0.002, 0.002),
-    );
-
-    arkitController.add(node);
-    alvo = node;
+    alvo.position.value = position;
+    arkitController.add(alvo);
+    alvoExiste = true;
+    setState(() {});
   }
 
   Future<void> tracarCaminho() {
     print('tracar caminho');
-
+    print(alvo.position.value);
     busyTracking = true;
 
-    arkitController.remove("line");
+    arkitController.remove('line');
     final line = ARKitLine(
       fromVector: tampi.position.value,
       toVector: alvo.position.value,
     );
-    final lineNode = ARKitNode(name: "line", geometry: line);
+    final lineNode = ARKitNode(name: 'line', geometry: line);
     arkitController.add(lineNode);
 
     final distance = _calculateDistanceBetweenPoints(
@@ -234,9 +258,11 @@ class ARKitState extends State<ARPage> {
     // calcula o angulo
     final dx = alvo.position.value.x - tampi.position.value.x;
     final dz = alvo.position.value.z - tampi.position.value.z;
-    final angAlvo = math.atan(dx / dz);
+    double angAlvo = math.atan(dx / dz);
+    if (angAlvo < -math.pi) angAlvo += 2 * math.pi;
+
     double ang = (tampi.eulerAngles.value.y - angAlvo) * 180 / math.pi;
-    if (ang < -math.pi) ang += 2 * math.pi;
+
     print('angulo entre = ' + ang.toString());
 
     String s = 'm'; // caracter de inicio de movimento
@@ -292,7 +318,7 @@ class ARKitState extends State<ARPage> {
   }
 
   Future<void> atualizaRotacao(ARKitAnchor anchor) {
-    print('atualizando a rotacao do node');
+//    print('atualizando a rotacao do node');
     busyRotacao = true;
 
     // get the matrix coordinates
@@ -325,9 +351,7 @@ class ARKitState extends State<ARPage> {
 
     if (r22 < 0) ry = -math.pi - ry;
 
-    print(ry * 180 / math.pi);
-    print(r21);
-    print(r22);
+//    print(ry * 180 / math.pi);
 
     tampi.eulerAngles.value = vector.Vector3(0, ry, 0);
     return Future.delayed(
