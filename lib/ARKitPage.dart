@@ -118,6 +118,35 @@ class ARKitState extends State<ARPage> {
       }
     };
 //    this.arkitController.onDidRemoveNodeForAnchor = onAnchorWasRemoved;
+    funcaoArtigo();
+  }
+
+  void funcaoArtigo() {
+    ARKitNode chicken = ARKitReferenceNode(
+    name: "chicken",
+    url: 'models.scnassets/chicken.dae',
+    scale: vector.Vector3(0.7, 0.7, 0.7),
+    isHidden: false,
+  );
+    ARKitNode morte = ARKitReferenceNode(
+    name: "morte",
+    url: 'models.scnassets/death.dae',
+    scale: vector.Vector3(0.002, 0.002, 0.002),
+    isHidden: false,
+  );
+
+      chicken.position.value = vector.Vector3(
+        0, 0, 0
+      );
+      morte.position.value = vector.Vector3(
+        -0.5, 0, -0.1
+      );
+
+      // chicken.eulerAngles.value = vector.Vector3(0, -math.pi/2, 0);
+      // morte.eulerAngles.value = vector.Vector3(0, math.pi/2, 0);
+
+      arkitController.add(chicken);
+      arkitController.add(morte);
   }
 
   void onAnchorWasFound(ARKitAnchor anchor) {
@@ -202,18 +231,21 @@ class ARKitState extends State<ARPage> {
   }
 
   void _onPlaneTapHandler(Matrix4 transform) {
-    arkitController.remove('alvo');
 
-    final position = vector.Vector3(
-      transform.getColumn(3).x,
-      transform.getColumn(3).y,
-      transform.getColumn(3).z,
-    );
+    arkitController.remove('chicken');
+    arkitController.remove('morte');
+    // arkitController.remove('alvo');
 
-    alvo.position.value = position;
-    arkitController.add(alvo);
-    alvoExiste = true;
-    setState(() {});
+    // final position = vector.Vector3(
+    //   transform.getColumn(3).x,
+    //   transform.getColumn(3).y,
+    //   transform.getColumn(3).z,
+    // );
+
+    // alvo.position.value = position;
+    // arkitController.add(alvo);
+    // alvoExiste = true;
+    // setState(() {});
   }
 
   Future<void> tracarCaminho() {

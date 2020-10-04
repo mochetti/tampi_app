@@ -52,16 +52,21 @@ class _Home extends State<Home> {
                   await (Connectivity().checkConnectivity());
               if (connectivityResult != ConnectivityResult.wifi) {
                 // nao estamos no wifi
+                print('nao estamos no wifi');
                 faltaConectar();
               }
               // estamos no wifi
               else {
                 var SSID = await (Connectivity().getWifiName());
                 // checa se estamos no wifi correto
-                if (SSID != 'tampi')
+                if (SSID == 'kkkk') {                                     // está retornado null sempre
+                  print('rede errada');
+                  print(SSID);
                   faltaConectar();
+                }
                 else {
                   // tenta abrir o websocket
+                  print('tentanto conectar');
                   sockets.initCommunication();
                   sockets.addListener(_onMessageReceived);
                   // debug

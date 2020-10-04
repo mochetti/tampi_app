@@ -68,6 +68,7 @@ class _ComandoPage extends State<ComandoPage> {
               child: Text(
                 'Enviar',
                 textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 30),              
               ),
             ),
             Tampa(_addComando, 4, tampinhas[3]),
@@ -90,6 +91,7 @@ class _ComandoPage extends State<ComandoPage> {
                 child: Text(
                   'Funcao 0',
                   textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 20),
                 ),
               ),
             ),
@@ -103,6 +105,7 @@ class _ComandoPage extends State<ComandoPage> {
                 child: Text(
                   'Funcao 1',
                   textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 20),
                 ),
               ),
             ),

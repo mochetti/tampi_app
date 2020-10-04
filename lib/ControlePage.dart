@@ -33,6 +33,7 @@ class _ControlePage extends State<ControlePage> {
             child: Text(
               'Me arraste',
               textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 25),
             ),
           ),
         ),
