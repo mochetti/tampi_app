@@ -5,6 +5,7 @@ import 'ConfigPage.dart';
 import 'websocket.dart';
 import 'ARPage.dart';
 import 'BuzzerPage.dart';
+import 'VoicePage.dart';
 
 class ConectedPage extends StatefulWidget {
   _ConectedPage createState() => _ConectedPage();
@@ -117,6 +118,19 @@ class _ConectedPage extends State<ConectedPage> {
                   MaterialPageRoute(
                     builder: (context) => ARPage(),
 //                      builder: (context) => MyImageTracker(),
+                  ),
+                );
+              },
+            ),
+            RaisedButton(
+              child: Icon(Icons.mic),
+              shape: CircleBorder(),
+              color: Colors.orangeAccent,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => VoicePage(),
                   ),
                 );
               },

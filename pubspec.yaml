@@ -32,6 +32,7 @@ dependencies:
       url: git://github.com/mochetti/arkit_flutter_plugin.git
   flutter_barcode_scanner: ^1.0.1
   web_socket_channel:
+  speech_to_text: ^2.7.0
   flutter:
     sdk: flutter
 

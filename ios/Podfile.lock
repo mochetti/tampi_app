@@ -1,71 +1,57 @@
 PODS:
-  - arcore_flutter_plugin (0.0.1):
-    - Flutter
   - arkit_plugin (0.0.1):
     - Flutter
   - connectivity (0.0.1):
     - Flutter
     - Reachability
-  - connectivity_for_web (0.1.0):
-    - Flutter
-  - connectivity_macos (0.0.1):
-    - Flutter
   - Flutter (1.0.0)
   - flutter_barcode_scanner (1.0.1):
     - Flutter
-  - flutter_plugin_android_lifecycle (0.0.1):
-    - Flutter
   - Reachability (3.2)
+  - speech_to_text (0.0.1):
+    - Flutter
+    - Try
+  - Try (2.1.1)
   - wifi_iot (0.0.1):
     - Flutter
 
 DEPENDENCIES:
-  - arcore_flutter_plugin (from `.symlinks/plugins/arcore_flutter_plugin/ios`)
   - arkit_plugin (from `.symlinks/plugins/arkit_plugin/ios`)
   - connectivity (from `.symlinks/plugins/connectivity/ios`)
-  - connectivity_for_web (from `.symlinks/plugins/connectivity_for_web/ios`)
-  - connectivity_macos (from `.symlinks/plugins/connectivity_macos/ios`)
   - Flutter (from `Flutter`)
   - flutter_barcode_scanner (from `.symlinks/plugins/flutter_barcode_scanner/ios`)
-  - flutter_plugin_android_lifecycle (from `.symlinks/plugins/flutter_plugin_android_lifecycle/ios`)
+  - speech_to_text (from `.symlinks/plugins/speech_to_text/ios`)
   - wifi_iot (from `.symlinks/plugins/wifi_iot/ios`)
 
 SPEC REPOS:
   trunk:
     - Reachability
+    - Try
 
 EXTERNAL SOURCES:
-  arcore_flutter_plugin:
-    :path: ".symlinks/plugins/arcore_flutter_plugin/ios"
   arkit_plugin:
     :path: ".symlinks/plugins/arkit_plugin/ios"
   connectivity:
     :path: ".symlinks/plugins/connectivity/ios"
-  connectivity_for_web:
-    :path: ".symlinks/plugins/connectivity_for_web/ios"
-  connectivity_macos:
-    :path: ".symlinks/plugins/connectivity_macos/ios"
   Flutter:
     :path: Flutter
   flutter_barcode_scanner:
     :path: ".symlinks/plugins/flutter_barcode_scanner/ios"
-  flutter_plugin_android_lifecycle:
-    :path: ".symlinks/plugins/flutter_plugin_android_lifecycle/ios"
+  speech_to_text:
+    :path: ".symlinks/plugins/speech_to_text/ios"
   wifi_iot:
     :path: ".symlinks/plugins/wifi_iot/ios"
 
 SPEC CHECKSUMS:
-  arcore_flutter_plugin: 59886964cab86408a05fd43442ca780a45ccdb87
   arkit_plugin: 3e42571e8be84adabb8a178bd51c22fa981e16bd
   connectivity: c4130b2985d4ef6fd26f9702e886bd5260681467
-  connectivity_for_web: 2b8584556930d4bd490d82b836bcf45067ce345b
-  connectivity_macos: e2e9731b6b22dda39eb1b128f6969d574460e191
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_barcode_scanner: 49cd22fac3304077a6c1672f63bee4a2572ffd85
-  flutter_plugin_android_lifecycle: dc0b544e129eebb77a6bfb1239d4d1c673a60a35
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
+  speech_to_text: b43a7d99aef037bd758ed8e45d79bbac035d2dfe
+  Try: 5ef669ae832617b3cee58cb2c6f99fb767a4ff96
   wifi_iot: b5aafd6f9b52f8a357383a1deabab45f31cd602d
 
-PODFILE CHECKSUM: 03ca1bf1c64dc8b19c6e4677c8bd060771e18859
+PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
 
-COCOAPODS: 1.9.1
+COCOAPODS: 1.10.0.rc.1
