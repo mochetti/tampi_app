@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'dart:math';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class VoicePage extends StatefulWidget {
   @override
@@ -21,10 +24,14 @@ class _VoicePageState extends State<VoicePage> {
   String lastStatus = "";
   String _currentLocaleId = "pt-BR";
   List<LocaleName> _localeNames = [];
-  final SpeechToText speech = SpeechToText();
+  SpeechToText speech = SpeechToText();
+  // AudioCache player = AudioCache();
+  // Audio player = new Audio();
+  bool playing = false;
 
   @override
   void initState() {
+    // player.clearCache();
     initSpeechState();
     super.initState();
   }
@@ -88,7 +95,6 @@ class _VoicePageState extends State<VoicePage> {
                     ),
                   ],
                 ),
-
                 Expanded(
                   child: Stack(
                     children: <Widget>[
@@ -104,22 +110,6 @@ class _VoicePageState extends State<VoicePage> {
                     ],
                   ),
                 ),
-                // Expanded(
-                //   flex: 1,
-                //   child: Column(
-                //     children: <Widget>[
-                //       Center(
-                //         child: Text(
-                //           'Error Status',
-                //           style: TextStyle(fontSize: 22.0),
-                //         ),
-                //       ),
-                //       Center(
-                //         child: Text(lastError),
-                //       ),
-                //     ],
-                //   ),
-                // ),
                 Container(
                   padding: EdgeInsets.symmetric(vertical: 20),
                   color: Theme.of(context).backgroundColor,
@@ -151,7 +141,7 @@ class _VoicePageState extends State<VoicePage> {
                   ),
                   child: IconButton(
                     icon: Icon(Icons.mic),
-                    onPressed: !_hasSpeech
+                    onPressed: !_hasSpeech || playing
                         ? null
                         : speech.isListening
                             ? stopListening
@@ -168,12 +158,13 @@ class _VoicePageState extends State<VoicePage> {
     lastError = "";
     speech.listen(
         onResult: resultListener,
-        listenFor: Duration(seconds: 10),
+        listenFor: Duration(seconds: 5),
         localeId: _currentLocaleId,
         onSoundLevelChange: soundLevelListener,
         cancelOnError: true,
         listenMode: ListenMode.confirmation);
     setState(() {});
+    print('startListening: $playing');
   }
 
   void stopListening() {
@@ -183,12 +174,12 @@ class _VoicePageState extends State<VoicePage> {
     });
   }
 
-  // void cancelListening() {
-  //   speech.cancel();
-  //   setState(() {
-  //     level = 0.0;
-  //   });
-  // }
+  void cancelListening() {
+    speech.cancel();
+    setState(() {
+      level = 0.0;
+    });
+  }
 
   void resultListener(SpeechRecognitionResult result) {
     setState(() {
@@ -196,7 +187,8 @@ class _VoicePageState extends State<VoicePage> {
       lastWords = result.recognizedWords;
       print('lastWords: $lastWords');
     });
-    switchCommand();
+    print('resultListener: $playing');
+    if (!playing) switchCommand();
   }
 
   void soundLevelListener(double level) {
@@ -209,7 +201,7 @@ class _VoicePageState extends State<VoicePage> {
   }
 
   void errorListener(SpeechRecognitionError error) {
-    // print("Received error status: $error, listening: ${speech.isListening}");
+    print("Received error status: $error, listening: ${speech.isListening}");
     setState(() {
       lastError = "${error.errorMsg} - ${error.permanent}";
     });
@@ -231,14 +223,42 @@ class _VoicePageState extends State<VoicePage> {
   }
 
   // Check if last words form a valid command
-  void switchCommand() {
+  void switchCommand() async {
+    print('switching command ...');
     String comando = 'none';
-    if (lastWords.contains('vire')) {
+    if (lastWords.contains('frente')) {
+      comando = 'andar para frente';
+      playSound('andando_para_frente.mp3');
+    } else if (lastWords.contains('vire') || lastWords.contains('Vire')) {
       if (lastWords.contains('direita')) {
         comando = 'virar a direita';
+        playSound('virando_a_direita.mp3');
+      } else if (lastWords.contains('esquerda')) {
+        comando = 'virar a esquerda';
+        playSound('virando_a_esquerda.mp3');
       }
     }
     print('comando: $comando');
+  }
+
+  void playSound(String file) async {
+    AudioPlayer audioPlayer = new AudioPlayer();
+    audioPlayer.monitorNotificationStateChanges(audioPlayerHandler);
+    AudioCache audioCache = new AudioCache();
+    print('playing $file');
+    cancelListening();
+    await audioCache.play(file);
+    setState(() {
+      playing = true;
+    });
+    Timer(Duration(seconds: 3), handleTimer);
+  }
+
+  void handleTimer() {
+    print('timer off');
+    setState(() {
+      playing = false;
+    });
   }
 }
 
@@ -259,4 +279,8 @@ class _VoiceInfoPageState extends State<VoiceInfoPage> {
       body: Center(child: Text('Exemplos de frases')),
     );
   }
+}
+
+void audioPlayerHandler(AudioPlayerState value) {
+  print('state: $value');
 }
