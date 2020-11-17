@@ -3,12 +3,12 @@ import 'Tampas.dart';
 import 'websocket.dart';
 import 'TampaDialogPage.dart';
 
-class ComandoPage extends StatefulWidget {
+class BoardPage extends StatefulWidget {
   @override
-  _ComandoPage createState() => _ComandoPage();
+  _BoardPageState createState() => _BoardPageState();
 }
 
-class _ComandoPage extends State<ComandoPage> {
+class _BoardPageState extends State<BoardPage> {
   List<Tampinha> tampinhas = new List.generate(14, (i) => new Tampinha());
 
   @override
@@ -59,7 +59,6 @@ class _ComandoPage extends State<ComandoPage> {
             Tampa(_addComando, 0, tampinhas[0]),
             Tampa(_addComando, 1, tampinhas[1]),
             Tampa(_addComando, 2, tampinhas[2]),
-
             Tampa(_addComando, 3, tampinhas[7]),
             RaisedButton(
               shape: CircleBorder(),
@@ -68,11 +67,10 @@ class _ComandoPage extends State<ComandoPage> {
               child: Text(
                 'Enviar',
                 textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 30),              
+                style: TextStyle(fontSize: 30),
               ),
             ),
             Tampa(_addComando, 4, tampinhas[3]),
-
             Tampa(_addComando, 5, tampinhas[6]),
             Tampa(_addComando, 6, tampinhas[5]),
             Tampa(_addComando, 7, tampinhas[4]),

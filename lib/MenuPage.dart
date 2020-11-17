@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'ComandoPage.dart';
-import 'ControlePage.dart';
+import 'BoardPage.dart';
+import 'JoystickPage.dart';
 import 'ConfigPage.dart';
 import 'websocket.dart';
 import 'ARPage.dart';
 import 'BuzzerPage.dart';
 import 'VoicePage.dart';
 
-class ConectedPage extends StatefulWidget {
-  _ConectedPage createState() => _ConectedPage();
+class MenuPage extends StatefulWidget {
+  _MenuPageState createState() => _MenuPageState();
 }
 
-class _ConectedPage extends State<ConectedPage> {
+class _MenuPageState extends State<MenuPage> {
   Future<bool> _onWillPop() async {
     return (await showDialog(
           context: context,
@@ -55,7 +55,7 @@ class _ConectedPage extends State<ConectedPage> {
           children: [
             RaisedButton(
               child: Text(
-                'Comandos',
+                'Painel',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 20),
               ),
@@ -65,14 +65,14 @@ class _ConectedPage extends State<ConectedPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ComandoPage(),
+                    builder: (context) => BoardPage(),
                   ),
                 );
               },
             ),
             RaisedButton(
               child: Text(
-                'Controle',
+                'Joystick',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 20),
               ),
@@ -82,7 +82,7 @@ class _ConectedPage extends State<ConectedPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ControlePage(),
+                    builder: (context) => JoystickPage(),
                   ),
                 );
               },
@@ -117,7 +117,6 @@ class _ConectedPage extends State<ConectedPage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => ARPage(),
-//                      builder: (context) => MyImageTracker(),
                   ),
                 );
               },

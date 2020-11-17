@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'websocket.dart';
 
-class ControlePage extends StatefulWidget {
+class JoystickPage extends StatefulWidget {
   @override
-  _ControlePage createState() => _ControlePage();
+  _JoystickPageState createState() => _JoystickPageState();
 }
 
-class _ControlePage extends State<ControlePage> {
+class _JoystickPageState extends State<JoystickPage> {
   @override
   void initState() {
     sockets.addListener(comandosServidor);
@@ -19,7 +19,7 @@ class _ControlePage extends State<ControlePage> {
     return Scaffold(
       backgroundColor: Colors.greenAccent,
       appBar: AppBar(
-        title: Text('Controle'),
+        title: Text('Joystick'),
       ),
       body: DraggableCard(
         child: Container(
@@ -140,15 +140,15 @@ class _DraggableCardState extends State<DraggableCard>
         double m1;
         double m2;
 
-        if(x > 70) {    // vira pra direita
+        if (x > 70) {
+          // vira pra direita
           m1 = 700;
           m2 = -700;
-        }
-        else if(x < 30) {    // vira pra direita
+        } else if (x < 30) {
+          // vira pra direita
           m1 = -700;
           m2 = 700;
-        }
-        else {
+        } else {
           m1 = y * -1 * 2046 / 100 + 1023;
           m2 = y * -1 * 2046 / 100 + 1023;
         }

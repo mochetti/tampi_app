@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'ConectedPage.dart';
+import 'MenuPage.dart';
 import 'websocket.dart';
 import 'package:connectivity/connectivity.dart';
 import 'instrucoesConexaoPage.dart';
@@ -59,12 +59,12 @@ class _Home extends State<Home> {
               else {
                 var SSID = await (Connectivity().getWifiName());
                 // checa se estamos no wifi correto
-                if (SSID == 'kkkk') {                                     // está retornado null sempre
+                if (SSID == 'kkkk') {
+                  // está retornado null sempre
                   print('rede errada');
                   print(SSID);
                   faltaConectar();
-                }
-                else {
+                } else {
                   // tenta abrir o websocket
                   print('tentanto conectar');
                   sockets.initCommunication();
@@ -96,7 +96,7 @@ class _Home extends State<Home> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ConectedPage(),
+          builder: (context) => MenuPage(),
         ),
       );
     } else if (message.toString() == 'erro') {

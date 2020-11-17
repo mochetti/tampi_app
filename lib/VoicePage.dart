@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:math';
-import 'dart:io';
+import 'websocket.dart';
 
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
@@ -116,11 +116,11 @@ class _VoicePageState extends State<VoicePage> {
                   child: Center(
                     child: speech.isListening
                         ? Text(
-                            "I'm listening...",
+                            "...",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           )
                         : Text(
-                            'Not listening',
+                            'Aperte o botão',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                   ),
@@ -225,20 +225,24 @@ class _VoicePageState extends State<VoicePage> {
   // Check if last words form a valid command
   void switchCommand() async {
     print('switching command ...');
-    String comando = 'none';
+    String comando = '';
     if (lastWords.contains('frente')) {
-      comando = 'andar para frente';
+      comando = '0';
       playSound('andando_para_frente.mp3');
     } else if (lastWords.contains('vire') || lastWords.contains('Vire')) {
       if (lastWords.contains('direita')) {
-        comando = 'virar a direita';
+        comando = '1';
         playSound('virando_a_direita.mp3');
       } else if (lastWords.contains('esquerda')) {
-        comando = 'virar a esquerda';
+        comando = '2';
         playSound('virando_a_esquerda.mp3');
       }
     }
+    if (comando == null) return;
+
+    comando = 'a' + comando + 'e';
     print('comando: $comando');
+    sockets.send(comando);
   }
 
   void playSound(String file) async {
