@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'TampaDialogPage.dart';
+import 'bottle_cap_button_widget.dart';
 
 class Tampinha {
   double pot = 50;
@@ -59,6 +60,20 @@ class Tampinha {
       'farol'
     ];
     return acoes[acao];
+  }
+
+  IconData getIcons() {
+    List<IconData> icons = [
+      Icons.radio_button_checked,
+      Icons.keyboard_arrow_up,
+      Icons.rotate_90_degrees_ccw,
+      Icons.volume_up,
+      Icons.graphic_eq,
+      Icons.wb_incandescent,
+      Icons.wb_incandescent,
+      Icons.highlight,
+    ];
+    return icons[acao];
   }
 
   // devolve a cor da tampinha
@@ -138,15 +153,11 @@ class _Tampa extends State<Tampa> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(4),
-      child: RaisedButton(
-        shape: CircleBorder(),
-        onPressed: dialogTampa,
+      child: bottleCapButton(
+        text: _t.getAcao() + '\n' + _t.getPot() + _t.getGrandeza(),
+        leadingIcon: _t.getAcao() == '' ? Icon(Icons.radio_button_checked) : null,
         color: _t.getCor(),
-        child: Text(
-          _t.getAcao() + '\n' + _t.getPot() + _t.getGrandeza(),
-          textAlign: TextAlign.center,
-          style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 2.0),
-        ),
+        onClick: dialogTampa,
       ),
     );
   }
@@ -176,7 +187,7 @@ class _TampaSelecao extends State<TampaSelecao> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(10),
-      height: 100,
+      height: 120,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         boxShadow: <BoxShadow>[
@@ -189,17 +200,13 @@ class _TampaSelecao extends State<TampaSelecao> {
           ),
         ],
       ),
-      child: RaisedButton(
-        shape: CircleBorder(),
-        onPressed: () => widget.setTampinha(_t.acao),
+      child: bottleCapButton(
+        text: _t.getAcao(),
+        textFontSize: 14,
+        leadingIcon: Icon(_t.getIcons()),
+        leadingIconMargin: 1,
         color: _t.acao == widget.t.acao ? _t.getCor() : _t.getCor(),
-//        colorBrightness: _t.acao == widget.t.acao
-//            ? Brightness.values[0]
-//            : Brightness.values[1],
-        child: Text(_t.getAcao(),
-            textAlign: TextAlign.center,
-            style:
-            DefaultTextStyle.of(context).style.apply(fontSizeFactor: 2.0)),
+        onClick: () => widget.setTampinha(_t.acao),
       ),
     );
   }

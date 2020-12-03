@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'Tampas.dart';
 import 'websocket.dart';
 import 'TampaDialogPage.dart';
+import 'bottle_cap_button_widget.dart';
 
 class BoardPage extends StatefulWidget {
   @override
@@ -60,15 +61,12 @@ class _BoardPageState extends State<BoardPage> {
             Tampa(_addComando, 1, tampinhas[1]),
             Tampa(_addComando, 2, tampinhas[2]),
             Tampa(_addComando, 3, tampinhas[7]),
-            RaisedButton(
-              shape: CircleBorder(),
-              onPressed: _enviar,
+            bottleCapButton(
+              text: 'enviar',
+              leadingIcon: Icon(Icons.publish),
+              leadingIconMargin: 10,
               color: Colors.green,
-              child: Text(
-                'Enviar',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 30),
-              ),
+              onClick: _enviar,
             ),
             Tampa(_addComando, 4, tampinhas[3]),
             Tampa(_addComando, 5, tampinhas[6]),
@@ -80,31 +78,29 @@ class _BoardPageState extends State<BoardPage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Container(
-              height: 150,
+              height: 300,
               padding: EdgeInsets.all(4),
-              child: RaisedButton(
-                shape: CircleBorder(),
-                onPressed: () => dialogFuncao(0),
+              child: bottleCapButton(
+                text: 'função 0',
+                leadingIcon: Icon(Icons.repeat),
+                leadingIconMargin: 10,
                 color: Colors.orangeAccent,
-                child: Text(
-                  'Funcao 0',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20),
-                ),
+                onClick: () {
+                  dialogFuncao(0);
+                }
               ),
             ),
             Container(
-              height: 150,
+              height: 300,
               padding: EdgeInsets.all(4),
-              child: RaisedButton(
-                shape: CircleBorder(),
-                onPressed: () => dialogFuncao(1),
+              child: bottleCapButton(
+                text: 'função 1',
+                leadingIcon: Icon(Icons.repeat),
+                leadingIconMargin: 10,
                 color: Colors.blueAccent,
-                child: Text(
-                  'Funcao 1',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20),
-                ),
+                onClick: () {
+                  dialogFuncao(1);
+                }
               ),
             ),
           ],
