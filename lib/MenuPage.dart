@@ -6,6 +6,7 @@ import 'websocket.dart';
 import 'ARPage.dart';
 import 'BuzzerPage.dart';
 import 'VoicePage.dart';
+import 'bottle_cap_button_widget.dart';
 
 class MenuPage extends StatefulWidget {
   _MenuPageState createState() => _MenuPageState();
@@ -51,109 +52,124 @@ class _MenuPageState extends State<MenuPage> {
           title: Text('tampi'),
         ),
         body: GridView.count(
+          primary: false,
+          padding: const EdgeInsets.all(20),
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
           crossAxisCount: 2,
-          children: [
-            RaisedButton(
-              child: Text(
-                'Painel',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 20),
-              ),
-              shape: CircleBorder(),
-              color: Colors.green,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BoardPage(),
-                  ),
-                );
-              },
-            ),
-            RaisedButton(
-              child: Text(
-                'Joystick',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 20),
-              ),
-              shape: CircleBorder(),
-              color: Colors.orange,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => JoystickPage(),
-                  ),
-                );
-              },
-            ),
-            RaisedButton(
-              child: Text(
-                'Buzzer',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 20),
-              ),
-              shape: CircleBorder(),
-              color: Colors.lightBlueAccent,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BuzzerPage(),
-                  ),
-                );
-              },
-            ),
-            RaisedButton(
-              child: Text(
-                'AR',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 20),
-              ),
-              shape: CircleBorder(),
-              color: Colors.purple,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ARPage(),
-                  ),
-                );
-              },
-            ),
-            RaisedButton(
-              child: Icon(Icons.mic),
-              shape: CircleBorder(),
-              color: Colors.orangeAccent,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => VoicePage(),
-                  ),
-                );
-              },
-            ),
-            RaisedButton(
-              child: Text(
-                'Config',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 20),
-              ),
-              shape: CircleBorder(),
-              color: Colors.red,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ConfigPage(),
-                  ),
-                );
-              },
-            ),
+          children: <Widget>[
+            _buildPainelButton(),
+            _buildJoystickButton(),
+            _buildBuzzerButton(),
+            _buildARButton(),
+            _buildMicButton(),
+            _buildConfigButton(),
           ],
         ),
       ),
     );
   }
+
+  Widget _buildPainelButton() {
+    return bottleCapButton(
+      text: 'painel',
+      leadingIcon: Icon(Icons.widgets),
+      leadingIconMargin: 10,
+      color: Colors.green,
+      onClick: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => BoardPage(),
+          ),
+        );
+      }
+    );
+  }
+
+  Widget _buildJoystickButton() {
+    return bottleCapButton(
+      text: 'joystick',
+      leadingIcon: Icon(Icons.games),
+      leadingIconMargin: 10,
+      color: Colors.orange,
+      onClick: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => JoystickPage(),
+          ),
+        );
+      }
+    );
+  }
+
+  Widget _buildBuzzerButton() {
+    return bottleCapButton(
+      text: 'buzzer',
+      leadingIcon: Icon(Icons.volume_up),
+      leadingIconMargin: 10,
+      color: Colors.pinkAccent,
+      onClick: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => BuzzerPage(),
+          ),
+        );
+      }
+    );
+  }
+
+  Widget _buildARButton() {
+    return bottleCapButton(
+      text: 'AR',
+      leadingIcon: Icon(Icons.visibility),
+      leadingIconMargin: 10,
+      color: Colors.purple,
+      onClick: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ARPage(),
+          ),
+        );
+      }
+    );
+  }
+
+  Widget _buildMicButton() {
+    return bottleCapButton(
+      text: 'voz',
+      leadingIcon: Icon(Icons.mic),
+      leadingIconMargin: 10,
+      color: Colors.blue,
+      onClick: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => VoicePage(),
+          ),
+        );
+      }
+    );
+  }
+
+  Widget _buildConfigButton() {
+    return bottleCapButton(
+      text: 'config',
+      leadingIcon: Icon(Icons.settings),
+      leadingIconMargin: 10,
+      color: Colors.red,
+      onClick: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ConfigPage(),
+          ),
+        );
+      }
+    );
+  }
+
 }

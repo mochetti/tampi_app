@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'websocket.dart';
+import 'bottle_cap_button_widget.dart';
 
 class JoystickPage extends StatefulWidget {
   @override
@@ -29,12 +30,12 @@ class _JoystickPageState extends State<JoystickPage> {
             color: Colors.orange,
             shape: BoxShape.circle,
           ),
-          child: Center(
-            child: Text(
-              'Me arraste',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 25),
-            ),
+          child: bottleCapButton(
+            text: 'me arraste',
+            textFontSize: 14,
+            leadingIcon: Icon(Icons.control_camera),
+            leadingIconMargin: 5,
+            color: Colors.orange,
           ),
         ),
       ),

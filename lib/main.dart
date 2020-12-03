@@ -3,6 +3,7 @@ import 'MenuPage.dart';
 import 'websocket.dart';
 import 'package:connectivity/connectivity.dart';
 import 'instrucoesConexaoPage.dart';
+import 'bottle_cap_button_widget.dart';
 
 void main() => runApp(MyApp());
 
@@ -37,15 +38,12 @@ class _Home extends State<Home> {
       body: Center(
         child: SizedBox(
           height: 200,
-          child: RaisedButton(
-            child: Text(
-              'Conectar',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 30),
-            ),
-            shape: CircleBorder(),
+          child: bottleCapButton(
+            text: 'conectar',
+            leadingIcon: Icon(Icons.settings_remote),
+            leadingIconMargin: 5,
             color: Colors.orange,
-            onPressed: () async {
+            onClick: () async {
               print('conectando...');
               // checa se estamos num wifi
               var connectivityResult =

@@ -41,7 +41,7 @@ class _TampaDialog extends State<TampaDialog> {
               width: double.maxFinite,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
-                color: Colors.lightBlue.withOpacity(0.8),
+                color: Colors.lightBlue.withOpacity(0.9),
               ),
               child: Center(
                 child: Text(
@@ -55,10 +55,10 @@ class _TampaDialog extends State<TampaDialog> {
               height: 20,
             ),
             Container(
-              height: 300,
+              height: 385,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
-                color: Colors.lightBlue.withOpacity(0.8),
+                color: Colors.lightBlue.withOpacity(0.9),
               ),
               child: SingleChildScrollView(
                 child: GridView.count(
@@ -164,7 +164,10 @@ class _FuncaoDialog extends State<FuncaoDialog> {
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: Colors.transparent,
-      insetPadding: EdgeInsets.all(10),
+      insetPadding: EdgeInsets.only(left: 10, right: 10, top: 315, bottom: 318),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+      ),
       child: Column(
         children: <Widget>[
           Container(
@@ -172,11 +175,11 @@ class _FuncaoDialog extends State<FuncaoDialog> {
             width: double.maxFinite,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
-              color: Colors.lightBlue.withOpacity(0.8),
+              color: Colors.lightBlue.withOpacity(0.9),
             ),
             child: Center(
               child: Text(
-                'Funcao ' + widget.id.toString(),
+                'Função ' + widget.id.toString(),
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 30),
               ),
@@ -185,13 +188,23 @@ class _FuncaoDialog extends State<FuncaoDialog> {
           SizedBox(
             height: 20,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Tampa(_addComando, widget.id * 3 + 8, widget.tes[0]),
-              Tampa(_addComando, widget.id * 3 + 9, widget.tes[1]),
-              Tampa(_addComando, widget.id * 3 + 10, widget.tes[2]),
-            ],
+          Container(
+            height: 130,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              color: Colors.lightBlue.withOpacity(0.9),
+            ),
+            child: SingleChildScrollView(
+              child: GridView.count(
+                crossAxisCount: 3,
+                shrinkWrap: true,
+                children: <Widget>[
+                  Tampa(_addComando, widget.id * 3 + 8, widget.tes[0]),
+                  Tampa(_addComando, widget.id * 3 + 9, widget.tes[1]),
+                  Tampa(_addComando, widget.id * 3 + 10, widget.tes[2]),
+                ],
+              ),
+            ),
           ),
           SizedBox(
             height: 20,

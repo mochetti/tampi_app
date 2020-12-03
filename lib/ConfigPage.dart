@@ -4,6 +4,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:tampi/ARPage.dart';
 import 'BuzzerPage.dart';
 import 'websocket.dart';
+import 'bottle_cap_button_widget.dart';
 
 class ConfigPage extends StatefulWidget {
   @override
@@ -22,74 +23,82 @@ class _ConfigPage extends State<ConfigPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Config Page"),
+        title: Text("Configurações"),
       ),
       body: GridView.count(
+        primary: false,
+        padding: const EdgeInsets.all(20),
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
         crossAxisCount: 2,
-        children: [
-          RaisedButton(
-            child: Text(
-              'outro tampi',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 20),
-            ),
-            shape: CircleBorder(),
-            color: Colors.green,
-            onPressed: qrScanner,
-          ),
-          RaisedButton(
-            child: Text(
-              'Buzzer',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 20),
-            ),
-            shape: CircleBorder(),
-            color: Colors.orange,
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => BuzzerTestePage(),
-                ),
-              );
-            },
-          ),
-          RaisedButton(
-            child: Text(
-              'AR',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 20),
-            ),
-            shape: CircleBorder(),
-            color: Colors.blueAccent,
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ARPage(),
-                ),
-              );
-            },
-          ),
-          RaisedButton(
-            child: Text(
-              'conexao',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 20),
-            ),
-            shape: CircleBorder(),
-            color: Colors.red,
-            onPressed: () async {
-              var connectivityResult =
-                  await (Connectivity().checkConnectivity());
-              if (connectivityResult == ConnectivityResult.wifi) {
-                // estamos no wifi
-                print('estamos no wifi');
-              }
-            },
-          ),
+        children: <Widget>[
+          _buildSecondTampiButton(),
+          _buildBuzzerButton(),
+          _buildARButton(),
+          _buildConectionButton(),
         ],
       ),
+    );
+  }
+
+  Widget _buildSecondTampiButton() {
+    return bottleCapButton(
+      text: 'tampi 2',
+      leadingIcon: Icon(Icons.android),
+      leadingIconMargin: 10,
+      color: Colors.green,
+      onClick: qrScanner,
+    );
+  }
+
+  Widget _buildBuzzerButton() {
+    return bottleCapButton(
+      text: 'buzzer',
+      leadingIcon: Icon(Icons.volume_up),
+      leadingIconMargin: 10,
+      color: Colors.orange,
+      onClick: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => BuzzerTestePage(),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildARButton() {
+    return bottleCapButton(
+      text: 'AR',
+      leadingIcon: Icon(Icons.visibility),
+      leadingIconMargin: 10,
+      color: Colors.blueAccent,
+      onClick: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ARPage(),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildConectionButton() {
+    return bottleCapButton(
+      text: 'conexão',
+      leadingIcon: Icon(Icons.sync_alt),
+      leadingIconMargin: 10,
+      color: Colors.red,
+      onClick: () async {
+        var connectivityResult =
+            await (Connectivity().checkConnectivity());
+        if (connectivityResult == ConnectivityResult.wifi) {
+          // estamos no wifi
+          print('estamos no wifi');
+        }
+      },
     );
   }
 }
