@@ -1,6 +1,6 @@
 # Tampi App
 
-Aplicativo mobile para o Tampi
+Aplicativo mobile desenvolvido em Flutter para o Tampi
 
 ## Funcionalidades
 
