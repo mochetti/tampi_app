@@ -35,6 +35,7 @@ dependencies:
   speech_to_text: ^2.7.0
   audioplayers: ^0.16.2
   tinycolor: ^1.0.3
+  bubble: ^1.1.9+1
   flutter:
     sdk: flutter
 
