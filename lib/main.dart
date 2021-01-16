@@ -110,12 +110,12 @@ class _Home extends State<Home> {
               }
               // estamos no wifi
               else {
-                var SSID = await (Connectivity().getWifiName());
+                var ssid = await (Connectivity().getWifiName());
                 // checa se estamos no wifi correto
-                if (SSID == 'kkkk') {
+                if (ssid == 'kkkk') {
                   // está retornado null sempre
                   print('rede errada');
-                  print(SSID);
+                  print(ssid);
                   faltaConectar();
                 } else {
                   // tenta abrir o websocket
@@ -123,7 +123,7 @@ class _Home extends State<Home> {
                   sockets.initCommunication();
                   sockets.addListener(_onMessageReceived);
                   // debug
-//                _onMessageReceived('welcome');
+                  // _onMessageReceived('welcome');
                 }
               }
             },

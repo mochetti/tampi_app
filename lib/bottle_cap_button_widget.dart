@@ -12,26 +12,25 @@ import 'color_utils.dart';
 /// height - Button height
 /// leadingIcon - If you want to display an icon before button text
 /// trailingIcon - If you want to display an icon after button text
-/// 
-ButtonTheme bottleCapButton(
-  {
-    VoidCallback onClick,
-    String text,
-    Color textColor,
-    double textFontSize = 20,
-    Color color,
-    Color splashColor,
-    double minWidth = 150,
-    double height = 150,
-    double leadingIconMargin = 0,
-    Widget leadingIcon,
-  }) {
+///
+ButtonTheme bottleCapButton({
+  VoidCallback onClick,
+  String text,
+  Color textColor,
+  double textFontSize = 20,
+  Color color,
+  Color splashColor,
+  double minWidth = 150,
+  double height = 150,
+  double leadingIconMargin = 0,
+  Widget leadingIcon,
+}) {
   return ButtonTheme(
     minWidth: minWidth,
     height: height,
     child: RaisedButton(
         splashColor: Colors.grey.withOpacity(0.5) ?? colorBlack,
-        shape: CircleBorder (
+        shape: CircleBorder(
           side: BorderSide(width: 5, color: color.darken(10)),
         ),
         textColor: Colors.white,

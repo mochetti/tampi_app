@@ -1,6 +1,6 @@
 import 'package:Tampi/main.dart';
 import 'package:flutter/material.dart';
-import 'BoardPage.dart';
+import 'PainelPage.dart';
 import 'JoystickPage.dart';
 import 'ConfigPage.dart';
 import 'websocket.dart';
@@ -84,7 +84,7 @@ class _MenuPageState extends State<MenuPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => BoardPage(),
+              builder: (context) => PainelPage(),
             ),
           );
         });

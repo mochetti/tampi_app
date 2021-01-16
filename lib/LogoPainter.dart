@@ -13,18 +13,21 @@ class LogoPainter extends CustomPainter {
   }
   @override
   void paint(Canvas canvas, Size size) {
+    canvas.translate(width / 2, height / 2);
+    canvas.scale(_fraction, _fraction);
+    canvas.rotate(_fraction * 2 * pi);
     // // T superior
     var path = Path();
-    path.moveTo(width / 4, height / 2 - 7 * width / 20);
-    path.lineTo(3 * width / 4, height / 2 - 7 * width / 20);
+    path.moveTo(-width / 4, -7 * width / 20);
+    path.lineTo(width / 4, -7 * width / 20);
     Rect r = Rect.fromCenter(
-        center: Offset(3 * width / 4, height / 2 - width / 4),
+        center: Offset(width / 4, -width / 4),
         width: width / 5,
         height: width / 5);
     path.arcTo(r, -3.1415926 / 2, 3.1415926, false);
-    path.lineTo(width / 4, height / 2 - 3 * width / 20);
+    path.lineTo(-width / 4, -3 * width / 20);
     r = Rect.fromCenter(
-        center: Offset(width / 4, height / 2 - width / 4),
+        center: Offset(-width / 4, -width / 4),
         width: width / 5,
         height: width / 5);
     path.arcTo(r, pi / 2, pi, false);
@@ -34,14 +37,13 @@ class LogoPainter extends CustomPainter {
 
     // Círculo superior
     _paint.color = Color(0xffCE8147);
-    var topCircle = Offset(_fraction * width / 2, height / 2);
+    var topCircle = Offset(0, 0);
     _paint.style = PaintingStyle.fill;
     canvas.drawCircle(topCircle, width / 10, _paint);
 
     // Círculo inferior
     _paint.color = Color(0xffECDD7B);
-    var bottomCircle =
-        Offset(width - _fraction * width / 2, height / 2 + width / 4);
+    var bottomCircle = Offset(0, width / 4);
     _paint.style = PaintingStyle.fill;
     canvas.drawCircle(bottomCircle, width / 10, _paint);
   }
