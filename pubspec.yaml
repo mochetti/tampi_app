@@ -67,9 +67,16 @@ flutter:
     - images/tampi2.png
     - images/tampi3.png
     - images/texture.dds
+    - images/cebolinha.png
+    - images/mickey.png
     - assets/virando_a_direita.mp3
     - assets/virando_a_esquerda.mp3
     - assets/andando_para_frente.mp3
+    - assets/arrow.dae
+    - assets/chicken.dae
+    - assets/death.dae
+    - assets/flag.dae
+    - assets/a6wjl-ph9oj.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
