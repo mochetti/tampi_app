@@ -1,16 +1,18 @@
-# tampi
+# Tampi App
 
-tampi app
+Aplicativo mobile desenvolvido em Flutter para o Tampi
 
-## Getting Started
+## Funcionalidades
 
-This project is a starting point for a Flutter application.
+Algumas das funcionalidades atuais são:
 
-A few resources to get you started if this is your first Flutter project:
+- Comunicação em tempo real usando websockets;
+- Envio de comandos simulando as tampinhas;
+- Controle usando joystick;
+- Controle usando reconhecimento de voz;
+- Composição de notas musicais para o buzzer embarcado;
+- Interação com o ambiente usando Realidade Aumentada (AR).
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## Contribuição
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Todas as sugestões são bem vindas. Caso encontre um bug, fique à vontade para [abrir uma issue](https://github.com/mochetti/tampi_app/issues/new).
