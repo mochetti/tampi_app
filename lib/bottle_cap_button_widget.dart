@@ -20,13 +20,13 @@ ButtonTheme bottleCapButton({
   double textFontSize = 20,
   Color color,
   Color splashColor,
-  double minWidth = 150,
-  double height = 150,
+  // double minWidth = 150,
+  double height = 100,
   double leadingIconMargin = 0,
   Widget leadingIcon,
 }) {
   return ButtonTheme(
-    minWidth: minWidth,
+    // minWidth: minWidth,
     height: height,
     child: RaisedButton(
         splashColor: Colors.grey.withOpacity(0.5) ?? colorBlack,

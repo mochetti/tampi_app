@@ -55,36 +55,46 @@ class _PainelPageState extends State<PainelPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            GridView.count(
-              physics: null,
-              crossAxisCount: 3,
-              shrinkWrap: true,
-              children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
                 Tampa(_addComando, 0, tampinhas[0]),
                 Tampa(_addComando, 1, tampinhas[1]),
                 Tampa(_addComando, 2, tampinhas[2]),
+              ],
+            ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
                 Tampa(_addComando, 3, tampinhas[7]),
                 bottleCapButton(
+                  // text: 'enviar',
                   leadingIcon: Icon(Icons.publish),
+                  // leadingIconMargin: 10,
                   color: Colors.green,
                   onClick: _enviar,
                 ),
                 Tampa(_addComando, 4, tampinhas[3]),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
                 Tampa(_addComando, 5, tampinhas[6]),
                 Tampa(_addComando, 6, tampinhas[5]),
                 Tampa(_addComando, 7, tampinhas[4]),
               ],
             ),
-            // Expanded(
-            //   child: Column(
-            //     children: [
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
+              children: [
                 Container(
                   padding: EdgeInsets.all(4),
                   child: bottleCapButton(
-                    text: 'função 0',
+                    text: '0',
                     leadingIcon: Icon(Icons.repeat),
                     leadingIconMargin: 10,
                     color: Colors.orangeAccent,
@@ -96,7 +106,7 @@ class _PainelPageState extends State<PainelPage> {
                 Container(
                   padding: EdgeInsets.all(4),
                   child: bottleCapButton(
-                    text: 'função 1',
+                    text: '1',
                     leadingIcon: Icon(Icons.repeat),
                     leadingIconMargin: 10,
                     color: Colors.blueAccent,
@@ -109,11 +119,11 @@ class _PainelPageState extends State<PainelPage> {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
+              children: [
                 Container(
                   padding: EdgeInsets.all(4),
                   child: bottleCapButton(
-                    text: 'função 2',
+                    text: '2',
                     leadingIcon: Icon(Icons.repeat),
                     leadingIconMargin: 10,
                     color: Colors.redAccent,
@@ -125,7 +135,7 @@ class _PainelPageState extends State<PainelPage> {
                 Container(
                   padding: EdgeInsets.all(4),
                   child: bottleCapButton(
-                    text: 'função 3',
+                    text: '3',
                     leadingIcon: Icon(Icons.repeat),
                     leadingIconMargin: 10,
                     color: Colors.purpleAccent,

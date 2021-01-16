@@ -26,7 +26,7 @@ dependencies:
   wifi_iot: ^0.1.1
   arcore_flutter_plugin:
     git:
-      url: git://github.com/mochetti/arcore_flutter_plugin.git
+      url: git://github.com/giandifra/arcore_flutter_plugin.git
   arkit_plugin:
     git:
       url: git://github.com/mochetti/arkit_flutter_plugin.git
