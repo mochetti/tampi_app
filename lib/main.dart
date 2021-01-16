@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'MenuPage.dart';
 import 'websocket.dart';
 import 'package:connectivity/connectivity.dart';
 import 'instrucoesConexaoPage.dart';
 import 'bottle_cap_button_widget.dart';
+import 'LogoPainter.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,8 +16,60 @@ class MyApp extends StatelessWidget {
     final title = 'tampi';
     return MaterialApp(
       title: title,
-      home: Home(),
+      home: LogoAnimator(),
     );
+  }
+}
+
+class LogoAnimator extends StatefulWidget {
+  LogoAnimator({Key key}) : super(key: key);
+
+  _LogoAnimatorState createState() => _LogoAnimatorState();
+}
+
+class _LogoAnimatorState extends State<LogoAnimator>
+    with SingleTickerProviderStateMixin {
+  double _fraction = 0.0;
+  Animation<double> animation;
+  AnimationController controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller = AnimationController(
+        duration: const Duration(milliseconds: 2000), vsync: this);
+
+    animation = Tween(begin: 0.0, end: 1.0).animate(controller)
+      ..addListener(() {
+        setState(() {
+          _fraction = animation.value;
+        });
+      });
+    WidgetsBinding.instance.addPostFrameCallback((_) => animacao(context));
+  }
+
+  Future<void> animacao(BuildContext context) async {
+    await controller.forward();
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => Home(),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      painter: LogoPainter(_fraction, MediaQuery.of(context).size.width,
+          MediaQuery.of(context).size.height),
+    );
+  }
+
+  @override
+  dispose() {
+    controller.dispose();
+    super.dispose();
   }
 }
 

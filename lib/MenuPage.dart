@@ -1,3 +1,4 @@
+import 'package:Tampi/main.dart';
 import 'package:flutter/material.dart';
 import 'BoardPage.dart';
 import 'JoystickPage.dart';
@@ -7,6 +8,7 @@ import 'ARPage.dart';
 import 'BuzzerPage.dart';
 import 'VoicePage.dart';
 import 'bottle_cap_button_widget.dart';
+import 'TrajetoPage.dart';
 
 class MenuPage extends StatefulWidget {
   _MenuPageState createState() => _MenuPageState();
@@ -32,7 +34,8 @@ class _MenuPageState extends State<MenuPage> {
                       tentarReconectar = false,
                       sockets.reset(),
                     },
-                  Navigator.of(context).popUntil((route) => route.isFirst),
+                  Navigator.of(context).pop(false),
+                  Navigator.of(context).pop(false),
                 },
                 child: new Text('Sim'),
               ),
@@ -63,6 +66,7 @@ class _MenuPageState extends State<MenuPage> {
             _buildBuzzerButton(),
             _buildARButton(),
             _buildMicButton(),
+            _buildTrajetoButton(),
             _buildConfigButton(),
           ],
         ),
@@ -72,104 +76,113 @@ class _MenuPageState extends State<MenuPage> {
 
   Widget _buildPainelButton() {
     return bottleCapButton(
-      text: 'painel',
-      leadingIcon: Icon(Icons.widgets),
-      leadingIconMargin: 10,
-      color: Colors.green,
-      onClick: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => BoardPage(),
-          ),
-        );
-      }
-    );
+        text: 'painel',
+        leadingIcon: Icon(Icons.widgets),
+        leadingIconMargin: 10,
+        color: Colors.green,
+        onClick: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BoardPage(),
+            ),
+          );
+        });
   }
 
   Widget _buildJoystickButton() {
     return bottleCapButton(
-      text: 'joystick',
-      leadingIcon: Icon(Icons.games),
-      leadingIconMargin: 10,
-      color: Colors.orange,
-      onClick: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => JoystickPage(),
-          ),
-        );
-      }
-    );
+        text: 'joystick',
+        leadingIcon: Icon(Icons.games),
+        leadingIconMargin: 10,
+        color: Colors.orange,
+        onClick: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => JoystickPage(),
+            ),
+          );
+        });
   }
 
   Widget _buildBuzzerButton() {
     return bottleCapButton(
-      text: 'buzzer',
-      leadingIcon: Icon(Icons.volume_up),
-      leadingIconMargin: 10,
-      color: Colors.pinkAccent,
-      onClick: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => BuzzerPage(),
-          ),
-        );
-      }
-    );
+        text: 'buzzer',
+        leadingIcon: Icon(Icons.volume_up),
+        leadingIconMargin: 10,
+        color: Colors.pinkAccent,
+        onClick: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BuzzerPage(),
+            ),
+          );
+        });
   }
 
   Widget _buildARButton() {
     return bottleCapButton(
-      text: 'AR',
-      leadingIcon: Icon(Icons.visibility),
-      leadingIconMargin: 10,
-      color: Colors.purple,
-      onClick: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ARPage(),
-          ),
-        );
-      }
-    );
+        text: 'AR',
+        leadingIcon: Icon(Icons.visibility),
+        leadingIconMargin: 10,
+        color: Colors.purple,
+        onClick: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ARPage(),
+            ),
+          );
+        });
   }
 
   Widget _buildMicButton() {
     return bottleCapButton(
-      text: 'voz',
-      leadingIcon: Icon(Icons.mic),
-      leadingIconMargin: 10,
-      color: Colors.blue,
-      onClick: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => VoicePage(),
-          ),
-        );
-      }
-    );
+        text: 'voz',
+        leadingIcon: Icon(Icons.mic),
+        leadingIconMargin: 10,
+        color: Colors.blue,
+        onClick: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => VoicePage(),
+            ),
+          );
+        });
+  }
+
+  Widget _buildTrajetoButton() {
+    return bottleCapButton(
+        text: 'trajeto',
+        leadingIcon: Icon(Icons.maximize),
+        leadingIconMargin: 10,
+        color: Colors.blue,
+        onClick: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => TrajetoPage(),
+            ),
+          );
+        });
   }
 
   Widget _buildConfigButton() {
     return bottleCapButton(
-      text: 'config',
-      leadingIcon: Icon(Icons.settings),
-      leadingIconMargin: 10,
-      color: Colors.red,
-      onClick: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ConfigPage(),
-          ),
-        );
-      }
-    );
+        text: 'config',
+        leadingIcon: Icon(Icons.settings),
+        leadingIconMargin: 10,
+        color: Colors.red,
+        onClick: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ConfigPage(),
+            ),
+          );
+        });
   }
-
 }

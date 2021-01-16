@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:tampi/ARPage.dart';
+import 'package:Tampi/ARPage.dart';
 import 'BuzzerPage.dart';
 import 'websocket.dart';
 import 'bottle_cap_button_widget.dart';
@@ -92,8 +92,7 @@ class _ConfigPage extends State<ConfigPage> {
       leadingIconMargin: 10,
       color: Colors.red,
       onClick: () async {
-        var connectivityResult =
-            await (Connectivity().checkConnectivity());
+        var connectivityResult = await (Connectivity().checkConnectivity());
         if (connectivityResult == ConnectivityResult.wifi) {
           // estamos no wifi
           print('estamos no wifi');
