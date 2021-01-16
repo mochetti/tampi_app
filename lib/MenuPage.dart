@@ -20,7 +20,7 @@ class _MenuPageState extends State<MenuPage> {
           context: context,
           builder: (context) => new AlertDialog(
             title: new Text('Sair'),
-            content: new Text('Deseja se desconectar ?'),
+            content: new Text('Deseja se desconectar?'),
             actions: <Widget>[
               new FlatButton(
                 onPressed: () => Navigator.of(context).pop(false),

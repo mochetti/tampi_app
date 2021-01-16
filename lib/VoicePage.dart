@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:math';
 import 'websocket.dart';
+import 'bottle_cap_button_widget.dart';
+import 'package:bubble/bubble.dart';
 
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
@@ -23,11 +25,14 @@ class _VoicePageState extends State<VoicePage> {
   String lastError = "";
   String lastStatus = "";
   String _currentLocaleId = "pt-BR";
-  List<LocaleName> _localeNames = [];
+
+  List<Widget> bubbles = [];
+  ScrollController scrollController = new ScrollController();
   SpeechToText speech = SpeechToText();
-  // AudioCache player = AudioCache();
-  // Audio player = new Audio();
   bool playing = false;
+
+  final TextEditingController textEditingController =
+      new TextEditingController();
 
   @override
   void initState() {
@@ -39,12 +44,6 @@ class _VoicePageState extends State<VoicePage> {
   Future<void> initSpeechState() async {
     bool hasSpeech = await speech.initialize(
         onError: errorListener, onStatus: statusListener);
-    if (hasSpeech) {
-      _localeNames = await speech.locales();
-
-      // var systemLocale = await speech.systemLocale();
-      // _currentLocaleId = systemLocale.localeId;
-    }
 
     if (!mounted) return;
 
@@ -55,10 +54,19 @@ class _VoicePageState extends State<VoicePage> {
 
   @override
   Widget build(BuildContext context) {
+    Timer(
+      Duration(milliseconds: 300),
+      () => scrollController.animateTo(
+        scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      ),
+    );
     return !_hasSpeech
         ? Container(child: CircularProgressIndicator())
         : MaterialApp(
             home: Scaffold(
+              backgroundColor: Colors.grey[100],
               appBar: AppBar(
                 title: const Text('Voice Page'),
                 actions: [
@@ -76,81 +84,106 @@ class _VoicePageState extends State<VoicePage> {
                 ],
               ),
               body: Column(children: [
-                SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    Text('Language: '),
-                    DropdownButton(
-                      onChanged: (selectedVal) => _switchLang(selectedVal),
-                      value: _currentLocaleId,
-                      items: _localeNames
-                          .map(
-                            (localeName) => DropdownMenuItem(
-                              value: localeName.localeId,
-                              child: Text(localeName.name),
-                            ),
-                          )
-                          .toList(),
-                    ),
-                  ],
-                ),
                 Expanded(
-                  child: Stack(
+                  child: ListView(
+                    controller: scrollController,
                     children: <Widget>[
-                      Container(
-                        color: Theme.of(context).selectedRowColor,
-                        child: Center(
-                          child: Text(
-                            lastWords,
-                            textAlign: TextAlign.center,
+                      Bubble(
+                        margin: BubbleEdges.only(
+                            top: 10, right: 55, bottom: 10, left: 10),
+                        elevation: 1,
+                        alignment: Alignment.bottomLeft,
+                        nip: BubbleNip.leftTop,
+                        child: Text(
+                          'Olá! Seja bem-vindo ao meu controle de voz. Fale um comando para eu executar.',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontStyle: FontStyle.normal,
+                            letterSpacing: 1.2,
                           ),
                         ),
                       ),
+                      for (Bubble b in bubbles) b,
                     ],
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  color: Theme.of(context).backgroundColor,
-                  child: Center(
-                    child: speech.isListening
-                        ? Text(
-                            "...",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          )
-                        : Text(
-                            'Aperte o botão',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                  ),
-                ),
-                Container(
-                  width: 100,
-                  height: 100,
-                  alignment: Alignment.center,
+                  constraints: BoxConstraints(minWidth: double.infinity),
+                  padding: EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                          blurRadius: .26,
-                          spreadRadius: level * 1.5,
-                          color: Colors.black.withOpacity(.05))
-                    ],
-                    color: Colors.orangeAccent,
-                    borderRadius: BorderRadius.all(Radius.circular(50)),
+                    color: Colors.grey[300],
                   ),
-                  child: IconButton(
-                    icon: Icon(Icons.mic),
-                    onPressed: !_hasSpeech || playing
-                        ? null
-                        : speech.isListening
-                            ? stopListening
-                            : startListening,
-                  ),
+                  child: lastWords != ''
+                      ? Text(
+                          lastWords,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontStyle: FontStyle.normal,
+                            letterSpacing: 1.2,
+                          ),
+                        )
+                      : speech.isListening
+                          ? Text(
+                              'ouvindo...',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontStyle: FontStyle.normal,
+                                letterSpacing: 1.2,
+                              ),
+                            )
+                          : Text(
+                              'Aperte o botão para falar comigo',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontStyle: FontStyle.normal,
+                                letterSpacing: 1.2,
+                              ),
+                            ),
                 ),
+                Container(
+                    constraints: BoxConstraints(minWidth: double.infinity),
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                    ),
+                    child: bottleCapButton(
+                      leadingIcon: Icon(Icons.mic),
+                      color: Colors.orange,
+                      onClick: !_hasSpeech || playing
+                          ? null
+                          : speech.isListening
+                              ? stopListening
+                              : startListening,
+                    )),
               ]),
             ),
           );
+  }
+
+  Widget _buildBubble(String bubbleMsg) {
+    return Bubble(
+      margin: BubbleEdges.only(
+          top: 10, right: 55, bottom: 10, left: 10),
+      elevation: 1,
+      alignment: Alignment.bottomLeft,
+      nip: BubbleNip.leftTop,
+      child: Text(
+        bubbleMsg,
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 20,
+          fontStyle: FontStyle.normal,
+          letterSpacing: 1.2,
+        ),
+      ),
+    );
   }
 
   void startListening() {
@@ -182,13 +215,33 @@ class _VoicePageState extends State<VoicePage> {
   }
 
   void resultListener(SpeechRecognitionResult result) {
-    setState(() {
-      // lastWords = "${result.recognizedWords} - ${result.finalResult}";
-      lastWords = result.recognizedWords;
-      print('lastWords: $lastWords');
-    });
-    print('resultListener: $playing');
-    if (!playing) switchCommand();
+    lastWords = result.recognizedWords;
+
+    if (result.finalResult) {
+      setState(() {
+        bubbles.add(
+          Bubble(
+            margin: BubbleEdges.only(top: 10, right: 10, bottom: 10),
+            elevation: 1,
+            alignment: Alignment.bottomRight,
+            nip: BubbleNip.rightTop,
+            color: Color.fromARGB(255, 225, 255, 199),
+            child: Text(
+              lastWords,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 20,
+                fontStyle: FontStyle.normal,
+                letterSpacing: 1.2,
+              ),
+            ),
+          ),
+        );
+
+        if (!playing) switchCommand();
+        lastWords = '';
+      });
+    }
   }
 
   void soundLevelListener(double level) {
@@ -215,13 +268,6 @@ class _VoicePageState extends State<VoicePage> {
     });
   }
 
-  _switchLang(selectedVal) {
-    setState(() {
-      _currentLocaleId = selectedVal;
-    });
-    print(selectedVal);
-  }
-
   // Check if last words form a valid command
   void switchCommand() async {
     print('switching command ...');
@@ -229,14 +275,21 @@ class _VoicePageState extends State<VoicePage> {
     if (lastWords.contains('frente')) {
       comando = '0';
       playSound('andando_para_frente.mp3');
-    } else if (lastWords.contains('vire') || lastWords.contains('Vire')) {
-      if (lastWords.contains('direita')) {
-        comando = '1';
-        playSound('virando_a_direita.mp3');
-      } else if (lastWords.contains('esquerda')) {
-        comando = '2';
-        playSound('virando_a_esquerda.mp3');
-      }
+      bubbles.add(
+        _buildBubble('Vamos lá! Andando para frente.'),
+      );
+    } else if (lastWords.contains('direita')) {
+      comando = '1';
+      playSound('virando_a_direita.mp3');
+      bubbles.add(
+        _buildBubble('Vamos lá! Virando à direita.'),
+      );
+    } else if (lastWords.contains('esquerda')) {
+      comando = '2';
+      playSound('virando_a_esquerda.mp3');
+      bubbles.add(
+        _buildBubble('Vamos lá! Virando à esquerda.'),
+      );
     }
     if (comando == null) return;
 
