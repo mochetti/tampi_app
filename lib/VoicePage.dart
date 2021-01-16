@@ -167,6 +167,25 @@ class _VoicePageState extends State<VoicePage> {
           );
   }
 
+  Widget _buildBubble(String bubbleMsg) {
+    return Bubble(
+      margin: BubbleEdges.only(
+          top: 10, right: 55, bottom: 10, left: 10),
+      elevation: 1,
+      alignment: Alignment.bottomLeft,
+      nip: BubbleNip.leftTop,
+      child: Text(
+        bubbleMsg,
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 20,
+          fontStyle: FontStyle.normal,
+          letterSpacing: 1.2,
+        ),
+      ),
+    );
+  }
+
   void startListening() {
     lastWords = "";
     lastError = "";
@@ -256,14 +275,21 @@ class _VoicePageState extends State<VoicePage> {
     if (lastWords.contains('frente')) {
       comando = '0';
       playSound('andando_para_frente.mp3');
-    } else if (lastWords.contains('vire') || lastWords.contains('Vire')) {
-      if (lastWords.contains('direita')) {
-        comando = '1';
-        playSound('virando_a_direita.mp3');
-      } else if (lastWords.contains('esquerda')) {
-        comando = '2';
-        playSound('virando_a_esquerda.mp3');
-      }
+      bubbles.add(
+        _buildBubble('Vamos lá! Andando para frente.'),
+      );
+    } else if (lastWords.contains('direita')) {
+      comando = '1';
+      playSound('virando_a_direita.mp3');
+      bubbles.add(
+        _buildBubble('Vamos lá! Virando à direita.'),
+      );
+    } else if (lastWords.contains('esquerda')) {
+      comando = '2';
+      playSound('virando_a_esquerda.mp3');
+      bubbles.add(
+        _buildBubble('Vamos lá! Virando à esquerda.'),
+      );
     }
     if (comando == null) return;
 
