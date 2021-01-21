@@ -6,7 +6,7 @@ import 'websocket.dart';
 import 'package:connectivity/connectivity.dart';
 import 'instrucoesConexaoPage.dart';
 import 'bottle_cap_button_widget.dart';
-import 'LogoPainter.dart';
+import 'Animations.dart';
 
 void main() => runApp(MyApp());
 
@@ -78,7 +78,17 @@ class Home extends StatefulWidget {
   _Home createState() => _Home();
 }
 
-class _Home extends State<Home> {
+class _Home extends State<Home> with SingleTickerProviderStateMixin {
+  bool conectado = false;
+  bool conectando = false;
+
+  // @override
+  // void initState() {
+  //   print(conectado);
+  //   // TODO: implement initState
+  //   super.initState();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,15 +97,12 @@ class _Home extends State<Home> {
         onPressed: () => _onMessageReceived('welcome'),
         child: Icon(Icons.wifi),
       ),
-//      appBar: AppBar(
-//        title: Text('tampi'),
-//      ),
       body: Center(
         child: SizedBox(
           height: 200,
           child: bottleCapButton(
             text: 'conectar',
-            leadingIcon: Icon(Icons.settings_remote),
+            leadingIcon: Icon(Icons.wifi),
             leadingIconMargin: 5,
             color: Colors.orange,
             onClick: () async {
@@ -107,24 +114,36 @@ class _Home extends State<Home> {
                 // nao estamos no wifi
                 print('nao estamos no wifi');
                 faltaConectar();
+                return;
               }
+
+              print("animacao");
+              showDialog(
+                context: context,
+                builder: (_) => LoadingAlert(
+                  onCancel: () {
+                    sockets.removeListener(_onMessageReceived);
+                    Navigator.pop(context);
+                  },
+                ),
+              );
+
               // estamos no wifi
-              else {
-                var ssid = await (Connectivity().getWifiName());
-                // checa se estamos no wifi correto
-                if (ssid == 'kkkk') {
-                  // está retornado null sempre
-                  print('rede errada');
-                  print(ssid);
-                  faltaConectar();
-                } else {
-                  // tenta abrir o websocket
-                  print('tentanto conectar');
-                  sockets.initCommunication();
-                  sockets.addListener(_onMessageReceived);
-                  // debug
-                  // _onMessageReceived('welcome');
-                }
+              var ssid = await (Connectivity().getWifiName());
+              // checa se estamos no wifi correto
+              if (ssid == 'kkkk') {
+                // está retornado null sempre
+                print('rede errada');
+                print(ssid);
+                faltaConectar();
+                return;
+              } else {
+                // tenta abrir o websocket
+                print('tentando conectar');
+                sockets.initCommunication();
+                sockets.addListener(_onMessageReceived);
+                // debug
+                // _onMessageReceived('welcome');
               }
             },
           ),
@@ -135,6 +154,7 @@ class _Home extends State<Home> {
 
   void faltaConectar() {
     print('falta conectar');
+    Navigator.pop(context);
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -146,6 +166,7 @@ class _Home extends State<Home> {
   void _onMessageReceived(message) {
     // verifica se a msg é pra mim
     if (message.toString() == 'welcome') {
+      Navigator.pop(context);
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -153,6 +174,7 @@ class _Home extends State<Home> {
         ),
       );
     } else if (message.toString() == 'erro') {
+      sockets.removeListener(_onMessageReceived);
       faltaConectar();
     }
   }

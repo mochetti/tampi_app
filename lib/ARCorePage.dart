@@ -16,7 +16,7 @@ class ARCoreState extends State<ARPage> {
 
   ArCoreNode alvo = ArCoreReferenceNode(
     name: 'alvo',
-    objectUrl: 'assets/nykz-flag.dae',
+    objectUrl: 'assets/flag.dae',
   );
   ArCoreNode tampi = ArCoreReferenceNode(
     name: 'tampi',
@@ -25,6 +25,16 @@ class ARCoreState extends State<ARPage> {
     /// testar com esses parametros ao inves de se basear na ancora da imagem
 //        position: augmentedImage.centerPose.translation,
 //        rotation: augmentedImage.centerPose.rotation
+  );
+
+  ArCoreNode teste = ArCoreNode(
+    shape: ArCoreCube(size: vector.Vector3(0.1, 0.1, 0.1), materials: [
+      ArCoreMaterial(
+        color: Color(0xFFFF0000),
+      )
+    ]),
+    name: "teste",
+    position: vector.Vector3(1, 1, 1),
   );
 
   Map<int, ArCoreAugmentedImage> augmentedImagesMap = Map();
@@ -41,42 +51,39 @@ class ARCoreState extends State<ARPage> {
           enableTapRecognizer: true,
 
           /// talvez tenhamos problems com isso
-          type: ArCoreViewType.AUGMENTEDIMAGES,
+          type: ArCoreViewType.STANDARDVIEW,
         ),
-        floatingActionButton: Visibility(
-          child: FloatingActionButton(
-            onPressed: () {
-              if (tracking) {
-                tracking = false;
-                arCoreController.removeNode(nodeName: 'line');
-                String s = 'm0:0e';
-                print(s);
-                sockets.send(s);
-              } else {
-                tracking = true;
-                timer = Timer.periodic(
-                    Duration(milliseconds: 100),
-                    (timer) => (busyTracking || alvo.position.value == null)
-                        ? print('tracking ocupado ou alvo invalido ou IsHidden')
-                        : tracarCaminho());
-              }
-              setState(() {});
-            },
-            tooltip: 'Enviar',
-            child: tracking ? Icon(Icons.stop) : Icon(Icons.play_arrow),
-          ),
-          visible: alvoExiste,
-        ),
+        // floatingActionButton: Visibility(
+        //   child: FloatingActionButton(
+        //     onPressed: () {
+        //       if (tracking) {
+        //         tracking = false;
+        //         arCoreController.removeNode(nodeName: 'line');
+        //         String s = 'm0:0e';
+        //         print(s);
+        //         sockets.send(s);
+        //       } else {
+        //         tracking = true;
+        //         timer = Timer.periodic(
+        //             Duration(milliseconds: 100),
+        //             (timer) => (busyTracking || alvo.position.value == null)
+        //                 ? print('tracking ocupado ou alvo invalido ou IsHidden')
+        //                 : tracarCaminho());
+        //       }
+        //       setState(() {});
+        //     },
+        //     tooltip: 'Enviar',
+        //     child: tracking ? Icon(Icons.stop) : Icon(Icons.play_arrow),
+        //   ),
+        //   visible: alvoExiste,
+        // ),
       ),
     );
   }
 
   void _onArCoreViewCreated(ArCoreController controller) async {
     arCoreController = controller;
-    arCoreController.onTrackingImage = _handleOnTrackingImage;
-    loadSingleImage();
-    //OR
-//    loadImagesDatabase();
+    arCoreController.addArCoreNodeWithAnchor(teste);
   }
 
   loadSingleImage() async {
@@ -104,11 +111,11 @@ class ARCoreState extends State<ARPage> {
   }
 
   Future _addAlvo(ArCoreHitTestResult hit) async {
-
     alvo.position.value = hit.pose.translation;
 //    alvo.rotation.value = hit.pose.rotation;
     alvoExiste = true;
     arCoreController.addArCoreNodeWithAnchor(alvo);
+    arCoreController.addArCoreNode(alvo);
   }
 
   Future atualizaTampi(ArCoreAugmentedImage augmentedImage) async {
