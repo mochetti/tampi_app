@@ -1,22 +1,26 @@
 import 'dart:async';
-
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import 'MenuPage.dart';
-import 'websocket.dart';
+import 'package:Tampi/Screens/MenuPage.dart';
+import 'package:Tampi/Utils/websocket.dart';
 import 'package:connectivity/connectivity.dart';
-import 'instrucoesConexaoPage.dart';
-import 'bottle_cap_button_widget.dart';
-import 'Animations.dart';
+import 'package:Tampi/Screens/instrucoesConexaoPage.dart';
+import 'package:Tampi/Utils/bottle_cap_button_widget.dart';
+import 'package:Tampi/Utils/Animations.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final title = 'tampi';
     return MaterialApp(
-      title: title,
-      home: LogoAnimator(),
+      initialRoute: '/',
+      home: new LogoAnimator(),
+      routes: <String, WidgetBuilder>{
+        '/logo': (BuildContext context) => new LogoAnimator(),
+        '/home': (BuildContext context) => new Home(),
+        '/menu': (BuildContext context) => new MenuPage(),
+      },
     );
   }
 }
@@ -51,18 +55,26 @@ class _LogoAnimatorState extends State<LogoAnimator>
 
   Future<void> animacao(BuildContext context) async {
     await controller.forward();
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => Home(),
-      ),
-    );
+    // Navigator.of(context).push(
+    //   MaterialPageRoute(
+    //     // settings: RouteSettings(name: Home.routeName),
+    //     builder: (context) => Home(),
+    //   ),
+    // );
+    Navigator.pushReplacementNamed(context, "/home");
   }
 
   @override
   Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: LogoPainter(_fraction, MediaQuery.of(context).size.width,
-          MediaQuery.of(context).size.height),
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: CustomPaint(
+        painter: LogoPainter(_fraction, MediaQuery.of(context).size.width,
+            MediaQuery.of(context).size.height),
+      ),
     );
   }
 
@@ -81,16 +93,13 @@ class Home extends StatefulWidget {
 class _Home extends State<Home> with SingleTickerProviderStateMixin {
   bool conectado = false;
   bool conectando = false;
-
-  // @override
-  // void initState() {
-  //   print(conectado);
-  //   // TODO: implement initState
-  //   super.initState();
-  // }
+  WebSocketsNotifications sockets = new WebSocketsNotifications();
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     return Scaffold(
       backgroundColor: Colors.lightBlueAccent,
       floatingActionButton: FloatingActionButton(
@@ -166,13 +175,7 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
   void _onMessageReceived(message) {
     // verifica se a msg é pra mim
     if (message.toString() == 'welcome') {
-      Navigator.pop(context);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => MenuPage(),
-        ),
-      );
+      Navigator.pushNamed(context, "/menu");
     } else if (message.toString() == 'erro') {
       sockets.removeListener(_onMessageReceived);
       faltaConectar();

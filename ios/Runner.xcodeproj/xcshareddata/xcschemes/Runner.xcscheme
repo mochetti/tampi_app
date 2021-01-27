@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1020"
+   LastUpgradeVersion = "1210"
    version = "2.0">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -51,6 +51,11 @@
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES"
       launchAutomaticallySubstyle = "2">
+      <RemoteRunnable
+         runnableDebuggingMode = "0"
+         BundleIdentifier = "com.sala49.tampi"
+         RemotePath = "/var/containers/Bundle/Application/154680EE-3A8A-4999-8147-616FB9968F5F/Runner.app">
+      </RemoteRunnable>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"

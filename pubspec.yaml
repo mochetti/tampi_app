@@ -36,6 +36,7 @@ dependencies:
   audioplayers: ^0.16.2
   tinycolor: ^1.0.3
   bubble: ^1.1.9+1
+  flutter_midi: ^1.0.2
   flutter:
     sdk: flutter
 
@@ -77,6 +78,7 @@ flutter:
     - assets/death.dae
     - assets/flag.dae
     - assets/a6wjl-ph9oj.png
+    - assets/sounds/Piano.SF2
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
